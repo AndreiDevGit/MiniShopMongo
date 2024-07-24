@@ -21,11 +21,10 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use((req, res, next) => {
   User.findById('66a034ea24b128f625380c2d')
     .then(user => {
-      req.user = user
+      req.user = new User(user.name, user.email, user.cart, user._id)
       next()
     })
     .catch(err => console.log(err))
-
 })
 
 app.use('/admin', adminRoutes)
@@ -36,5 +35,3 @@ app.use(errorController.get404)
 mongoConnect(() => {
   app.listen(3000)
 })
-
-//test commit
