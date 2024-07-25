@@ -56,6 +56,43 @@ class User {
       )
   }
 
+  addOrder() {
+    const db = getDb()
+    return db.collection('orders')
+      .insertOne(this.cart)
+      .then(result => {
+        this.cart = { items: [] }
+        return db
+          .collection('users')
+          .updateOne(
+            { _id: new ObjectId(this._id) },
+            { $set: { cart: { items: [] } } }
+          )
+      })
+
+    // const db = getDb()
+    // return this.getCart()
+    //   .then(products => {
+    //     const order = {
+    //       items: products,
+    //       user: {
+    //         _id: new ObjectId(this._id),
+    //         name: this.name
+    //       }
+    //     }
+    //     return db.collection('orders').insertOne(order)
+    //   })
+    //   .then(result => {
+    //     this.cart = { items: [] }
+    //     return db
+    //       .collection('users')
+    //       .updateOne(
+    //         { _id: new ObjectId(this._id) },
+    //         { $set: { cart: { items: [] } } }
+    //       )
+    //   })
+  }
+
   getCart() {
     const db = getDb()
     const productIds = this.cart.items.map(i => {
@@ -76,6 +113,7 @@ class User {
         })
       })
   }
+
 
   static findById(userId) {
     const db = getDb()
