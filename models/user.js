@@ -17,6 +17,7 @@ class User {
   }
 
   addToCart(product) {
+
     const cartProductIndex = this.cart.items.findIndex(cp => {
       return cp.productId.toString() === product._id.toString()
     })
@@ -35,13 +36,11 @@ class User {
     const updatedCart = {
       items: updatedCartItems
     }
+    
     const db = getDb()
-    return db
-      .collection('users')
-      .updateOne(
-        { _id: new ObjectId(this._id) },
-        { $set: { cart: updatedCart } }
-      )
+    return db.collection('users').updateOne({ _id: new ObjectId(this._id) }, { $set: { cart: updatedCart } })
+
+
   }
 
   getCart() {
